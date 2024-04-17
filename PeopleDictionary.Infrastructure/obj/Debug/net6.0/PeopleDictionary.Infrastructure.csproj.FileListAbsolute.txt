@@ -1,0 +1,34 @@
+C:\Users\acer\Desktop\New folder\PeopleDictionary.Infrastructure\bin\Debug\net6.0\PeopleDictionary.Infrastructure.deps.json
+C:\Users\acer\Desktop\New folder\PeopleDictionary.Infrastructure\bin\Debug\net6.0\PeopleDictionary.Infrastructure.dll
+C:\Users\acer\Desktop\New folder\PeopleDictionary.Infrastructure\bin\Debug\net6.0\PeopleDictionary.Infrastructure.pdb
+C:\Users\acer\Desktop\New folder\PeopleDictionary.Infrastructure\obj\Debug\net6.0\PeopleDictionary.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\acer\Desktop\New folder\PeopleDictionary.Infrastructure\obj\Debug\net6.0\PeopleDictionary.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\acer\Desktop\New folder\PeopleDictionary.Infrastructure\obj\Debug\net6.0\PeopleDictionary.Infrastructure.AssemblyInfo.cs
+C:\Users\acer\Desktop\New folder\PeopleDictionary.Infrastructure\obj\Debug\net6.0\PeopleDictionary.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\acer\Desktop\New folder\PeopleDictionary.Infrastructure\obj\Debug\net6.0\PeopleDictionary.Infrastructure.dll
+C:\Users\acer\Desktop\New folder\PeopleDictionary.Infrastructure\obj\Debug\net6.0\refint\PeopleDictionary.Infrastructure.dll
+C:\Users\acer\Desktop\New folder\PeopleDictionary.Infrastructure\obj\Debug\net6.0\PeopleDictionary.Infrastructure.pdb
+C:\Users\acer\Desktop\New folder\PeopleDictionary.Infrastructure\obj\Debug\net6.0\ref\PeopleDictionary.Infrastructure.dll
+C:\Users\acer\Desktop\New folder\PeopleDictionary.Infrastructure\obj\Debug\net6.0\PeopleDictionary.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\acer\Desktop\New folder\PeopleDictionary.Infrastructure\bin\Debug\net6.0\PeopleDictionary.Application.dll
+C:\Users\acer\Desktop\New folder\PeopleDictionary.Infrastructure\bin\Debug\net6.0\PeopleDictionary.Core.dll
+C:\Users\acer\Desktop\New folder\PeopleDictionary.Infrastructure\bin\Debug\net6.0\PeopleDictionary.Application.pdb
+C:\Users\acer\Desktop\New folder\PeopleDictionary.Infrastructure\bin\Debug\net6.0\PeopleDictionary.Core.pdb
+C:\Users\acer\Desktop\New folder\PeopleDictionary.Infrastructure\obj\Debug\net6.0\PeopleDictionary.Infrastructure.csproj.CopyComplete
+C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary.Infrastructure\bin\Debug\net6.0\PeopleDictionary.Infrastructure.deps.json
+C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary.Infrastructure\bin\Debug\net6.0\PeopleDictionary.Infrastructure.dll
+C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary.Infrastructure\bin\Debug\net6.0\PeopleDictionary.Infrastructure.pdb
+C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary.Infrastructure\bin\Debug\net6.0\PeopleDictionary.Application.dll
+C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary.Infrastructure\bin\Debug\net6.0\PeopleDictionary.Core.dll
+C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary.Infrastructure\bin\Debug\net6.0\PeopleDictionary.Application.pdb
+C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary.Infrastructure\bin\Debug\net6.0\PeopleDictionary.Core.pdb
+C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary.Infrastructure\obj\Debug\net6.0\PeopleDictionary.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary.Infrastructure\obj\Debug\net6.0\PeopleDictionary.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary.Infrastructure\obj\Debug\net6.0\PeopleDictionary.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary.Infrastructure\obj\Debug\net6.0\PeopleDictionary.Infrastructure.AssemblyInfo.cs
+C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary.Infrastructure\obj\Debug\net6.0\PeopleDictionary.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary.Infrastructure\obj\Debug\net6.0\PeopleDictionary.Infrastructure.csproj.CopyComplete
+C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary.Infrastructure\obj\Debug\net6.0\PeopleDictionary.Infrastructure.dll
+C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary.Infrastructure\obj\Debug\net6.0\refint\PeopleDictionary.Infrastructure.dll
+C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary.Infrastructure\obj\Debug\net6.0\PeopleDictionary.Infrastructure.pdb
+C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary.Infrastructure\obj\Debug\net6.0\ref\PeopleDictionary.Infrastructure.dll

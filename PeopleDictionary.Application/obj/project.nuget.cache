@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "HkI4pfsDivCs4TduDap6eYNAf5hwcXmMS9RnfbwvLOxHHcmSbI7WXpvSFL+SgVIpf4oFHWav43CQJ+CMqMNkcQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\acer\\source\\repos\\PeopleDictionary\\PeopleDictionary.Application\\PeopleDictionary.Application.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\acer\\.nuget\\packages\\microsoft.aspnetcore.http.features\\5.0.17\\microsoft.aspnetcore.http.features.5.0.17.nupkg.sha512",
+    "C:\\Users\\acer\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.1\\microsoft.extensions.primitives.5.0.1.nupkg.sha512",
+    "C:\\Users\\acer\\.nuget\\packages\\system.io.pipelines\\5.0.2\\system.io.pipelines.5.0.2.nupkg.sha512"
+  ],
+  "logs": []
+}
