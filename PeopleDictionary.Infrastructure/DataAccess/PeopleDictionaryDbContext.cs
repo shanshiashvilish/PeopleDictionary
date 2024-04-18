@@ -8,6 +8,7 @@ namespace PeopleDictionary.Infrastructure.DataAccess
     public class PeopleDictionaryDbContext : DbContext
     {
         public DbSet<Person> People { get; set; }
+        public DbSet<Person> RelatedPeople { get; set; }
         public DbSet<City> Cities { get; set; }
 
 

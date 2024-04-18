@@ -1,10 +1,8 @@
-﻿using PeopleDictionary.Core.Cities;
-using PeopleDictionary.Core.Enums;
-using PeopleDictionary.Infrastructure.Repositories;
+﻿using PeopleDictionary.Core.Enums;
 
 namespace PeopleDictionary.Core.People
 {
-    public class Person : Entity
+    public class Person
     {
         public int Id { get; set; }
         public string? City { get; set; }
@@ -19,16 +17,36 @@ namespace PeopleDictionary.Core.People
         public DateTime DateOfCreate { get; set; }
         public DateTime DateOfUpdate { get; set; }
 
+
         public void EditData(int id, string name, string lastname, GenderEnums gender, string personalId, DateTime dateofBirth, string city, List<TelephoneNumbers> telNumbers)
         {
             Id = id;
-            Name= name;
+            Name = name;
             Lastname = lastname;
             Gender = gender;
             PersonalId = personalId;
             DateOfBirth = dateofBirth;
             City = city;
             TelNumbers = telNumbers;
+        }
+
+        public void AddRelatedPerson(RelatedPeople relatedPerson)
+        {
+            RelatedPeople ??= new List<RelatedPeople>();
+
+            RelatedPeople.Add(relatedPerson);
+        }
+
+        public void RemoveRelatedPerson(int personId)
+        {
+            if (RelatedPeople != null)
+            {
+                var relatedPerson = RelatedPeople.FirstOrDefault(rp => rp.PersonId == personId);
+                if (relatedPerson != null)
+                {
+                    RelatedPeople.Remove(relatedPerson);
+                }
+            }
         }
     }
 
