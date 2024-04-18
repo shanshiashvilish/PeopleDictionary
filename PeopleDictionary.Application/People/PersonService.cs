@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using PeopleDictionary.Core.Enums;
 using PeopleDictionary.Core.People;
+using PeopleDictionary.Core.RelatedPeople;
 
 namespace PeopleDictionary.Application.People
 {
@@ -106,7 +107,7 @@ namespace PeopleDictionary.Application.People
                     return false;
                 }
 
-                person.AddRelatedPerson(new RelatedPeople { PersonId = relatedId, RelationType = type });
+                person.AddRelatedPerson(new RelatedPerson { Person = person,  });
 
                 await _repository.SaveChangesAsync();
 

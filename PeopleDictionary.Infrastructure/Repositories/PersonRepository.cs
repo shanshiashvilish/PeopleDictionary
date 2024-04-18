@@ -55,11 +55,6 @@ namespace PeopleDictionary.Infrastructure.Repositories
                 query = query.Where(p => EF.Functions.Like(p.PersonalId, $"%{personalId}%"));
             }
 
-            if (!string.IsNullOrEmpty(city))
-            {
-                query = query.Where(p => EF.Functions.Like(p.City, $"%{city}%"));
-            }
-
             if (gender != null)
             {
                 query = query.Where(p => p.Gender == gender);

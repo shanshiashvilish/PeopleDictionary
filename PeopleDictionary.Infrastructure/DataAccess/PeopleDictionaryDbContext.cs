@@ -21,6 +21,8 @@ namespace PeopleDictionary.Infrastructure.DataAccess
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new PeopleConfiguration());
+            modelBuilder.ApplyConfiguration(new RelatedPeopleConfiguration());
+            modelBuilder.ApplyConfiguration(new CitiesConfiguration());
         }
     }
 }

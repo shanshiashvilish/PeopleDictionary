@@ -1,16 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
+﻿using Microsoft.OpenApi.Models;
 using PeopleDictionary.Infrastructure.Configuration;
 using PeopleDictionary.Infrastructure.DataAccess;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
+using PeopleDictionary.Infrastructure.DataAccess.Seeding;
 
 namespace PeopleDictionary.Api
 {
@@ -27,10 +19,12 @@ namespace PeopleDictionary.Api
         {
             services.AddDbContext<PeopleDictionaryDbContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("Default"));
+                options.UseSqlServer(Configuration.GetConnectionString("DbConnection"));
             });
 
+            services.AddScoped<CityDataSeeder>();
             services.AddPersonServices();
+            
             services.AddHttpClient();
             services.AddMvc();
             services.AddControllers();
@@ -41,7 +35,7 @@ namespace PeopleDictionary.Api
             });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, CityDataSeeder cityDataSeeder)
         {
             if (env.IsDevelopment())
             {
@@ -49,6 +43,8 @@ namespace PeopleDictionary.Api
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "PeopleDictionary.Api v1"));
             }
+
+            cityDataSeeder.Seed();
 
             app.UseHttpsRedirection();
             app.UseRouting();

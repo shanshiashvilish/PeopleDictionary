@@ -88,15 +88,8 @@ C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary\bin\Debug\net6.0\Mi
 C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Abstractions.dll
 C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Relational.dll
 C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.SqlServer.dll
-C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary\bin\Debug\net6.0\Microsoft.Extensions.Caching.Abstractions.dll
 C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary\bin\Debug\net6.0\Microsoft.Extensions.Caching.Memory.dll
-C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary\bin\Debug\net6.0\Microsoft.Extensions.Configuration.Abstractions.dll
 C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.dll
-C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
-C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary\bin\Debug\net6.0\Microsoft.Extensions.Logging.dll
-C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary\bin\Debug\net6.0\Microsoft.Extensions.Logging.Abstractions.dll
-C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary\bin\Debug\net6.0\Microsoft.Extensions.Options.dll
-C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary\bin\Debug\net6.0\Microsoft.Extensions.Primitives.dll
 C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary\bin\Debug\net6.0\Microsoft.Identity.Client.dll
 C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary\bin\Debug\net6.0\Microsoft.IdentityModel.JsonWebTokens.dll
 C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary\bin\Debug\net6.0\Microsoft.IdentityModel.Logging.dll
@@ -154,3 +147,6 @@ C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary\obj\Debug\net6.0\re
 C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary\obj\Debug\net6.0\PeopleDictionary.Api.pdb
 C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary\obj\Debug\net6.0\PeopleDictionary.Api.genruntimeconfig.cache
 C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary\obj\Debug\net6.0\ref\PeopleDictionary.Api.dll
+C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary\bin\Debug\net6.0\Humanizer.dll
+C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Design.dll
+C:\Users\acer\source\repos\PeopleDictionary\PeopleDictionary\bin\Debug\net6.0\Newtonsoft.Json.dll

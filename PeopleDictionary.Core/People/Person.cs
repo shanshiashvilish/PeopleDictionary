@@ -1,21 +1,25 @@
-﻿using PeopleDictionary.Core.Enums;
+﻿using PeopleDictionary.Core.Cities;
+using PeopleDictionary.Core.Enums;
+using PeopleDictionary.Core.RelatedPeople;
 
 namespace PeopleDictionary.Core.People
 {
     public class Person
     {
         public int Id { get; set; }
-        public string? City { get; set; }
+        public int? CityId { get; set; }
         public string? PersonalId { get; set; }
         public string? Name { get; set; }
         public string? Lastname { get; set; }
         public string? Image { get; set; }
-        public List<RelatedPeople>? RelatedPeople { get; set; }
+        public List<RelatedPerson>? RelatedPeople { get; set; }
         public List<TelephoneNumbers>? TelNumbers { get; set; }
         public GenderEnums Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
         public DateTime DateOfCreate { get; set; }
         public DateTime DateOfUpdate { get; set; }
+
+        public City? City { get; set; }
 
 
         public void EditData(int id, string name, string lastname, GenderEnums gender, string personalId, DateTime dateofBirth, string city, List<TelephoneNumbers> telNumbers)
@@ -26,13 +30,12 @@ namespace PeopleDictionary.Core.People
             Gender = gender;
             PersonalId = personalId;
             DateOfBirth = dateofBirth;
-            City = city;
             TelNumbers = telNumbers;
         }
 
-        public void AddRelatedPerson(RelatedPeople relatedPerson)
+        public void AddRelatedPerson(RelatedPerson relatedPerson)
         {
-            RelatedPeople ??= new List<RelatedPeople>();
+            RelatedPeople ??= new List<RelatedPerson>();
 
             RelatedPeople.Add(relatedPerson);
         }
@@ -54,11 +57,5 @@ namespace PeopleDictionary.Core.People
     {
         public TelephoneNumberEnums Type { get; set; }
         public string? Number { get; set; }
-    }
-
-    public class RelatedPeople
-    {
-        public RelationEnums RelationType { get; set; }
-        public int PersonId { get; set; }
     }
 }
