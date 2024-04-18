@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PeopleDictionary.Api.Models.Requests;
+using PeopleDictionary.Api.Models.Responses;
 using PeopleDictionary.Core.Enums;
 using PeopleDictionary.Core.People;
 
@@ -25,7 +27,7 @@ namespace PeopleDictionary.Api.Controllers
             {
                 var result = await _personService.GetByIdAsync(id);
 
-                return Ok(result);
+                return Ok(GetByIdResponse.BuildFrom(result));
             }
             catch (Exception ex)
             {
@@ -33,8 +35,8 @@ namespace PeopleDictionary.Api.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<ActionResult> QuickSearchAsync([FromQuery] string name, [FromQuery] string lastname, [FromQuery] string personalId)
+        [HttpGet("/quick")]
+        public async Task<ActionResult> QuickSearchAsync([FromQuery] string? name, [FromQuery] string? lastname, [FromQuery] string? personalId)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
@@ -43,7 +45,16 @@ namespace PeopleDictionary.Api.Controllers
             {
                 var result = await _personService.QuickSearchAsync(name, lastname, personalId);
 
-                return Ok(result);
+                if (result == null)
+                {
+                    return BadRequest();
+                }
+
+                var response = new List<GetByIdResponse>();
+
+                result.ForEach(x => response.Add(GetByIdResponse.BuildFrom(x)));
+
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -52,14 +63,16 @@ namespace PeopleDictionary.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateAsync(Person person)
+        public async Task<ActionResult> CreateAsync([FromBody] CreatePersonRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
 
             try
             {
-                await _personService.CreateAsync(person);
+                var model = CreatePersonRequest.BuildFrom(request);
+
+                await _personService.CreateAsync(model);
 
                 return Ok();
             }
@@ -70,14 +83,14 @@ namespace PeopleDictionary.Api.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult> UpdateAsync([FromBody] int id, string name, string lastname, GenderEnums gender, string personalId, DateTime DateOfBirth, string city, List<TelephoneNumbers> telNumbers)
+        public async Task<ActionResult> UpdateAsync([FromBody] UpdatePersonRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
 
             try
             {
-                await _personService.UpdateAsync(id, name, lastname, gender, personalId, DateOfBirth, city, telNumbers);
+                await _personService.UpdateAsync(request.Id, request.Name, request.Lastname, request.Gender, request.PersonalId, request.DateOfBirth, request.CityId, request.TelNumbers);
 
                 return Ok();
             }
@@ -87,7 +100,7 @@ namespace PeopleDictionary.Api.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPut("image")]
         public async Task<ActionResult> UploadOrUpdateImageAsync([FromRoute] int id, [FromForm] IFormFile file)
         {
             if (!ModelState.IsValid)
@@ -105,7 +118,7 @@ namespace PeopleDictionary.Api.Controllers
             }
         }
 
-        [HttpPatch]
+        [HttpPatch("relation/add")]
         public async Task<ActionResult> AddRelationAsync([FromQuery] int personId, [FromQuery] int relatedId, [FromQuery] RelationEnums type)
         {
             if (!ModelState.IsValid)
@@ -123,7 +136,7 @@ namespace PeopleDictionary.Api.Controllers
             }
         }
 
-        [HttpPatch]
+        [HttpPatch("relation/remove")]
         public async Task<ActionResult> RemoveRelationAsync([FromQuery] int personId, [FromQuery] int relatedId)
         {
             if (!ModelState.IsValid)

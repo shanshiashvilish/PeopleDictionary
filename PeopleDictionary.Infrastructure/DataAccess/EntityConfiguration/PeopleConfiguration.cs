@@ -14,6 +14,7 @@ namespace PeopleDictionary.Infrastructure.DataAccess.EntityConfiguration
             builder.ToTable("people");
 
             builder.HasKey(p => p.Id);
+            builder.HasIndex(p => p.PersonalId).IsUnique();
             builder.Property(p => p.PersonalId).IsRequired().HasMaxLength(11);
             builder.Property(p => p.Name).IsRequired().HasMaxLength(50);
             builder.Property(p => p.Lastname).IsRequired().HasMaxLength(50);

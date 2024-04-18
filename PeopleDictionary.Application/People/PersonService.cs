@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using PeopleDictionary.Core.Cities;
 using PeopleDictionary.Core.Enums;
 using PeopleDictionary.Core.People;
 using PeopleDictionary.Core.RelatedPeople;
@@ -19,6 +20,7 @@ namespace PeopleDictionary.Application.People
             try
             {
                 await _repository.AddAsync(person);
+                await _repository.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -26,7 +28,7 @@ namespace PeopleDictionary.Application.People
             }
         }
 
-        public async Task<bool> UpdateAsync(int id, string name, string lastname, GenderEnums gender, string personalId, DateTime DateOfBirth, string city, List<TelephoneNumbers> telNumbers)
+        public async Task<bool> UpdateAsync(int id, string name, string lastname, GenderEnums gender, string personalId, DateTime DateOfBirth, int? cityId, List<TelephoneNumbers>? telNumbers)
         {
             var person = await GetByIdAsync(id);
 
@@ -34,6 +36,8 @@ namespace PeopleDictionary.Application.People
             {
                 return false;
             }
+
+            City city = new(); // TO DO: get city by id
 
             person.EditData(id, name, lastname, gender, personalId, DateOfBirth, city, telNumbers);
 
@@ -107,7 +111,7 @@ namespace PeopleDictionary.Application.People
                     return false;
                 }
 
-                person.AddRelatedPerson(new RelatedPerson { Person = person,  });
+                person.AddRelatedPerson(new RelatedPerson { Person = person, });
 
                 await _repository.SaveChangesAsync();
 
@@ -202,7 +206,7 @@ namespace PeopleDictionary.Application.People
             {
                 return (await _repository.GetRelatedPeopleByTypeAsync(relationType)).ToList();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return default;
