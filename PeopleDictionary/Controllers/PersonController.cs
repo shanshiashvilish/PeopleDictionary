@@ -100,13 +100,6 @@ namespace PeopleDictionary.Api.Controllers
 
             try
             {
-                var validationResults = request.Validate(new ValidationContext(request));
-
-                if (validationResults.Any())
-                {
-                    return BadRequest(validationResults.Select(v => v.ErrorMessage));
-                }
-
                 await _personService.UpdateAsync(request.Id, request.Name, request.Lastname, request.Gender, request.PersonalId, request.DateOfBirth, request.CityId, request.TelNumbers);
 
                 return Ok();
