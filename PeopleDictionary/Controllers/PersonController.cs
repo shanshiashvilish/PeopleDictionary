@@ -21,18 +21,26 @@ namespace PeopleDictionary.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetByIdAsync([FromQuery] int id)
+        public async Task<ActionResult<BaseModel<GetPersonResponse?>>> GetByIdAsync([FromQuery] int id)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
 
             try
             {
+                if (id < 1)
+                {
+                    return BadRequest(new BaseModel<bool>(false, default, "Id must be more than 1"));
+                }
+
                 var result = await _personService.GetByIdAsync(id);
 
-                var response = GetByIdResponse.BuildFrom(result);
+                if (result == null || !result.IsSuccess)
+                {
+                    return BadRequest(new BaseModel<bool>(false, default, result?.Message));
+                }
 
-                return Ok();
+                return await GetPersonResponse.BuildFrom(result);
             }
             catch (Exception ex)
             {
@@ -41,24 +49,23 @@ namespace PeopleDictionary.Api.Controllers
         }
 
         [HttpGet("/quick")]
-        public async Task<ActionResult> QuickSearchAsync([FromQuery] string? name, [FromQuery] string? lastname, [FromQuery] string? personalId)
+        public async Task<ActionResult<BaseModel<List<GetPersonResponse>>>>? QuickSearchAsync([FromQuery] QuickSearchRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
 
             try
             {
-                var result = await _personService.QuickSearchAsync(name, lastname, personalId);
+                // TO DO: validation
 
-                if (result == null)
+                var result = await _personService.QuickSearchAsync(request.Name, request.Lastname, request.PersonalId);
+
+                if (result == null || !result.IsSuccess)
                 {
-                    return BadRequest();
+                    return BadRequest(new BaseModel<bool>(false, default, result?.Message));
                 }
 
-                var response = new List<GetByIdResponse>();
-
-
-                return Ok(response);
+                return await GetPersonResponse.BuildFromList(result);
             }
             catch (Exception ex)
             {
@@ -79,7 +86,7 @@ namespace PeopleDictionary.Api.Controllers
 
                 if (!validate.IsValid)
                 {
-                    return BadRequest(new BaseModel<bool>(false, default, string.Join(",", validate.Errors.Select(e => e.ErrorMessage))));
+                    return BadRequest(new BaseModel<bool>(false, default, string.Join(",\n", validate.Errors.Select(e => e.ErrorMessage))));
                 }
 
                 var model = CreatePersonRequest.BuildFrom(request);
@@ -93,16 +100,16 @@ namespace PeopleDictionary.Api.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult> UpdateAsync([FromBody] UpdatePersonRequest request)
+        public async Task<ActionResult<BaseModel<bool>>> UpdateAsync([FromBody] UpdatePersonRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
 
             try
             {
-                await _personService.UpdateAsync(request.Id, request.Name, request.Lastname, request.Gender, request.PersonalId, request.DateOfBirth, request.CityId, request.TelNumbers);
+                // TO DO: validations
 
-                return Ok();
+                return await _personService.UpdateAsync(request.Id, request.Name, request.Lastname, request.Gender, request.PersonalId, request.DateOfBirth, request.CityId, request.TelNumbers);
             }
             catch (Exception ex)
             {
@@ -129,16 +136,20 @@ namespace PeopleDictionary.Api.Controllers
         }
 
         [HttpPatch("relation/add")]
-        public async Task<ActionResult> AddRelationAsync([FromQuery] int personId, [FromQuery] int relatedId, [FromQuery] RelationEnums type)
+        public async Task<ActionResult<BaseModel<bool>>> AddRelationAsync([FromQuery] int personId, [FromQuery] int relatedId, [FromQuery] RelationEnums type)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
 
             try
             {
-                var result = await _personService.AddRelationAsync(personId, relatedId, type);
+                // TO DO: validations
+                if (personId < 1 || relatedId < 1)
+                {
+                    return BadRequest(new BaseModel<bool>(false, default, "Id must be more than 1"));
+                }
 
-                return Ok(result);
+                return await _personService.AddRelationAsync(personId, relatedId, type);
             }
             catch (Exception ex)
             {
@@ -147,16 +158,20 @@ namespace PeopleDictionary.Api.Controllers
         }
 
         [HttpPatch("relation/remove")]
-        public async Task<ActionResult> RemoveRelationAsync([FromQuery] int personId, [FromQuery] int relatedId)
+        public async Task<ActionResult<BaseModel<bool>>> RemoveRelationAsync([FromQuery] int personId, [FromQuery] int relatedId)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
 
             try
             {
-                var result = await _personService.RemoveRelationAsync(personId, relatedId);
+                // TO DO: validations
+                if (personId < 1 || relatedId < 1)
+                {
+                    return BadRequest(new BaseModel<bool>(false, default, "Id must be more than 1"));
+                }
 
-                return Ok(result);
+                return await _personService.RemoveRelationAsync(personId, relatedId);
             }
             catch (Exception ex)
             {
@@ -172,6 +187,11 @@ namespace PeopleDictionary.Api.Controllers
 
             try
             {
+                if (personId < 1)
+                {
+                    return BadRequest(new BaseModel<bool>(false, default, "Id must be more than 1"));
+                }
+
                 _personService.Remove(personId);
 
                 return Ok();

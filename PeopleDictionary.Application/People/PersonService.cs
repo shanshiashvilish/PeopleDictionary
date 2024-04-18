@@ -39,10 +39,10 @@ namespace PeopleDictionary.Application.People
 
                 if (person == null || person.Data == null)
                 {
-                    return new BaseModel<bool>(false, default, $"Unable to find person with id {id}");
+                    return new BaseModel<bool>(false, default, $"Unable to find person with ID {id}");
                 }
 
-                if (cityId == null)
+                if (cityId < 1)
                 {
                     return new BaseModel<bool>(false, default, "City ID is not provided");
                 }
@@ -57,7 +57,7 @@ namespace PeopleDictionary.Application.People
                 person.Data.EditData(id, name, lastname, gender, personalId, DateOfBirth, city, telNumbers);
                 await _repository.SaveChangesAsync();
 
-                return new BaseModel<bool>(true, default, string.Empty);
+                return new BaseModel<bool>(true, true, string.Empty);
             }
             catch (Exception ex)
             {
@@ -129,7 +129,7 @@ namespace PeopleDictionary.Application.People
 
                 await _repository.SaveChangesAsync();
 
-                return new BaseModel<bool>(true, default, string.Empty);
+                return new BaseModel<bool>(true, true, string.Empty);
             }
             catch (Exception ex)
             {
