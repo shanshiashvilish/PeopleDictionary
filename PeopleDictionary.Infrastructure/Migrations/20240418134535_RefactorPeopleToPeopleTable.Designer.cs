@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PeopleDictionary.Infrastructure.DataAccess;
 
@@ -11,9 +12,10 @@ using PeopleDictionary.Infrastructure.DataAccess;
 namespace PeopleDictionary.Infrastructure.Migrations
 {
     [DbContext(typeof(PeopleDictionaryDbContext))]
-    partial class PeopleDictionaryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240418134535_RefactorPeopleToPeopleTable")]
+    partial class RefactorPeopleToPeopleTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -118,6 +120,9 @@ namespace PeopleDictionary.Infrastructure.Migrations
                     b.Property<int>("PersonId")
                         .HasColumnType("int");
 
+                    b.Property<int>("PersonId1")
+                        .HasColumnType("int");
+
                     b.Property<int>("RelatedToId")
                         .HasColumnType("int");
 
@@ -127,6 +132,8 @@ namespace PeopleDictionary.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("PersonId");
+
+                    b.HasIndex("PersonId1");
 
                     b.HasIndex("RelatedToId");
 
@@ -144,9 +151,15 @@ namespace PeopleDictionary.Infrastructure.Migrations
 
             modelBuilder.Entity("PeopleDictionary.Core.RelatedPeople.RelatedPerson", b =>
                 {
-                    b.HasOne("PeopleDictionary.Core.People.Person", "Person")
+                    b.HasOne("PeopleDictionary.Core.People.Person", null)
                         .WithMany("Relations")
                         .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("PeopleDictionary.Core.People.Person", "Person")
+                        .WithMany()
+                        .HasForeignKey("PersonId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

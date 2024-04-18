@@ -13,6 +13,18 @@ namespace PeopleDictionary.Infrastructure.DataAccess.EntityConfiguration
             builder.HasKey(rp => rp.Id);
 
             builder.Property(c => c.DateOfCreate).HasDefaultValueSql("GETUTCDATE()").ValueGeneratedOnAdd();
+
+            builder.HasOne(rp => rp.Person)
+                   .WithMany(p => p.Relations)
+                   .HasForeignKey(rp => rp.PersonId)
+                   .IsRequired()
+                   .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(rp => rp.RelatedTo)
+                   .WithMany()
+                   .HasForeignKey(rp => rp.RelatedToId)
+                   .IsRequired()
+                   .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

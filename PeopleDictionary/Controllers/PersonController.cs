@@ -27,7 +27,9 @@ namespace PeopleDictionary.Api.Controllers
             {
                 var result = await _personService.GetByIdAsync(id);
 
-                return Ok(GetByIdResponse.BuildFrom(result));
+                var response = GetByIdResponse.BuildFrom(result);
+
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -52,7 +54,6 @@ namespace PeopleDictionary.Api.Controllers
 
                 var response = new List<GetByIdResponse>();
 
-                result.ForEach(x => response.Add(GetByIdResponse.BuildFrom(x)));
 
                 return Ok(response);
             }

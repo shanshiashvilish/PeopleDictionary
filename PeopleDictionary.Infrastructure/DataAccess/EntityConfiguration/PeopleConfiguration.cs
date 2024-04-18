@@ -29,8 +29,8 @@ namespace PeopleDictionary.Infrastructure.DataAccess.EntityConfiguration
                                    c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
                                    c => c.ToList()));
 
-            builder.HasMany(p => p.RelatedPeople).WithOne(rp => rp.Person).HasForeignKey(rp => rp.PersonId);
-            builder.HasOne(p => p.City).WithMany().HasForeignKey(p => p.CityId);
+            builder.HasMany(p => p.Relations).WithOne().HasForeignKey(rp => rp.PersonId).IsRequired().OnDelete(DeleteBehavior.NoAction);
+
         }
     }
 }

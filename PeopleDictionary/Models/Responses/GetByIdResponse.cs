@@ -1,4 +1,5 @@
-﻿using PeopleDictionary.Core.Enums;
+﻿using PeopleDictionary.Core.Base;
+using PeopleDictionary.Core.Enums;
 using PeopleDictionary.Core.People;
 using PeopleDictionary.Core.RelatedPeople;
 
@@ -17,21 +18,28 @@ namespace PeopleDictionary.Api.Models.Responses
         public GenderEnums Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
 
-        public static GetByIdResponse BuildFrom(Person person)
+        public static Task<BaseModel<GetByIdResponse>> BuildFrom(BaseModel<Person> person)
         {
-            return new()
+            var result = new GetByIdResponse()
             {
-                Id = person.Id,
-                CityId = person.CityId,
-                PersonalId = person.PersonalId,
-                Name = person.Name,
-                Lastname = person.Lastname,
-                Image = person.Image,
-                RelatedPeople = person.RelatedPeople,
-                TelNumbers = person.TelNumbers,
-                Gender = person.Gender,
-                DateOfBirth = person.DateOfBirth.Date
+                Id = person.Data.Id,
+                CityId = person.Data.CityId,
+                PersonalId = person.Data.PersonalId,
+                Name = person.Data.Name,
+                Lastname = person.Data.Lastname,
+                Image = person.Data.Image,
+                RelatedPeople = person.Data.Relations?.Select(rp => rp).ToList(),
+                TelNumbers = person.Data.TelNumbers,
+                Gender = person.Data.Gender,
+                DateOfBirth = person.Data.DateOfBirth.Date
             };
+
+            return Task.FromResult(new BaseModel<GetByIdResponse>()
+            {
+                Code = person.Code,
+                Data = result,
+                Message = person.Message
+            });
         }
     }
 }

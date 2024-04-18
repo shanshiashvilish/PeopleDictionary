@@ -1,4 +1,5 @@
 ﻿
+using PeopleDictionary.Core.Cities;
 using PeopleDictionary.Core.Enums;
 
 namespace PeopleDictionary.Core.People
@@ -13,5 +14,7 @@ namespace PeopleDictionary.Core.People
                                   GenderEnums gender, DateTime? dateOfBirth, DateTime? dateOfCreate, DateTime? dateOfUpdate);
         Task<IEnumerable<Person>>? GetRelatedPeopleByTypeAsync(RelationEnums relationType);
         void Remove(int id);
+
+        Task<City> GetCityById(int id);
     }
 }

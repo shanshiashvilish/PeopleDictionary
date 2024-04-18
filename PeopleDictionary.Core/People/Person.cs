@@ -12,7 +12,7 @@ namespace PeopleDictionary.Core.People
         public string? Name { get; set; }
         public string? Lastname { get; set; }
         public string? Image { get; set; }
-        public List<RelatedPerson>? RelatedPeople { get; set; }
+        public List<RelatedPerson>? Relations { get; set; }
         public List<TelephoneNumbers>? TelNumbers { get; set; }
         public GenderEnums Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
@@ -35,21 +35,34 @@ namespace PeopleDictionary.Core.People
             CityId = city.Id;
         }
 
-        public void AddRelatedPerson(RelatedPerson relatedPerson)
+        public void AddRelation(RelatedPerson relation)
         {
-            RelatedPeople ??= new List<RelatedPerson>();
+            Relations ??= new List<RelatedPerson>();
 
-            RelatedPeople.Add(relatedPerson);
+            if (Relations.Any(rp => rp.RelatedToId == relation.RelatedToId && rp.PersonId == Id && rp.Type == relation.Type))
+            {
+                // Relation already exists, handle this case accordingly
+                return;
+            }
+
+            var newRelation = new RelatedPerson
+            {
+                Person = this,
+                Type = relation.Type,
+                RelatedTo = relation.RelatedTo,
+            };
+
+            Relations.Add(newRelation);
         }
 
-        public void RemoveRelatedPerson(int personId)
+        public void RemoveRelation(int relatedToId)
         {
-            if (RelatedPeople != null)
+            if (Relations != null)
             {
-                var relatedPerson = RelatedPeople.FirstOrDefault(rp => rp.PersonId == personId);
+                var relatedPerson = Relations.FirstOrDefault(rp => rp.PersonId == Id && rp.RelatedToId == relatedToId);
                 if (relatedPerson != null)
                 {
-                    RelatedPeople.Remove(relatedPerson);
+                    Relations.Remove(relatedPerson);
                 }
             }
         }

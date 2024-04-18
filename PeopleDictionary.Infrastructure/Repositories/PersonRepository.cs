@@ -2,6 +2,7 @@
 using PeopleDictionary.Infrastructure.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using PeopleDictionary.Core.Enums;
+using PeopleDictionary.Core.Cities;
 
 namespace PeopleDictionary.Infrastructure.Repositories
 {
@@ -17,13 +18,14 @@ namespace PeopleDictionary.Infrastructure.Repositories
         public async Task AddAsync(Person person)
         {
             await _dbContext.AddAsync(person);
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Person>>? GetRelatedPeopleByTypeAsync(RelationEnums relationType)
         {
             return await _dbContext.People.Include(p => p.City)
-                                          .Include(p => p.RelatedPeople)
-                         .Where(p => p.RelatedPeople.Any(rp => rp.RelationType == relationType))
+                                          .Include(p => p.Relations)
+                         .Where(p => p.Relations.Any(rp => rp.Type == relationType))
                          .ToListAsync();
         }
 
@@ -81,7 +83,9 @@ namespace PeopleDictionary.Infrastructure.Repositories
 
         public async Task<Person> GetByIdAsync(int id)
         {
-            return await _dbContext.People.FirstOrDefaultAsync(p => p.Id == id);
+            return await _dbContext.People.Include(p => p.City)
+                                          .Include(p => p.Relations)
+                                          .FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task SaveChangesAsync()
@@ -92,6 +96,12 @@ namespace PeopleDictionary.Infrastructure.Repositories
         public void Remove(int id)
         {
             _dbContext.Remove(id);
+        }
+
+
+        public async Task<City> GetCityById(int id)
+        {
+            return await _dbContext.Cities.FirstOrDefaultAsync(p => p.Id == id);
         }
     }
 }
