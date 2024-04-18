@@ -15,8 +15,8 @@ namespace PeopleDictionary.Api.Controllers
             _personService = personService;
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult> GetByIdAsync(int id)
+        [HttpGet]
+        public async Task<ActionResult> GetByIdAsync([FromQuery] int id)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
