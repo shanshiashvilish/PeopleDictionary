@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PeopleDictionary.Api.Models.Requests;
 using PeopleDictionary.Api.Models.Responses;
+using PeopleDictionary.Api.Models.Validations;
+using PeopleDictionary.Core.Base;
 using PeopleDictionary.Core.Enums;
 using PeopleDictionary.Core.People;
+using System.ComponentModel.DataAnnotations;
 
 namespace PeopleDictionary.Api.Controllers
 {
@@ -64,18 +67,24 @@ namespace PeopleDictionary.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateAsync([FromBody] CreatePersonRequest request)
+        public async Task<ActionResult<BaseModel<bool>>> CreateAsync([FromBody] CreatePersonRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
 
             try
             {
+                var validator = new CreatePersonValidationModel(request);
+                var validate = await validator.ValidateAsync(request);
+
+                if (!validate.IsValid)
+                {
+                    return BadRequest(new BaseModel<bool>(false, default, string.Join(",", validate.Errors.Select(e => e.ErrorMessage))));
+                }
+
                 var model = CreatePersonRequest.BuildFrom(request);
 
-                await _personService.CreateAsync(model);
-
-                return Ok();
+                return await _personService.CreateAsync(model);
             }
             catch (Exception ex)
             {
@@ -91,6 +100,13 @@ namespace PeopleDictionary.Api.Controllers
 
             try
             {
+                var validationResults = request.Validate(new ValidationContext(request));
+
+                if (validationResults.Any())
+                {
+                    return BadRequest(validationResults.Select(v => v.ErrorMessage));
+                }
+
                 await _personService.UpdateAsync(request.Id, request.Name, request.Lastname, request.Gender, request.PersonalId, request.DateOfBirth, request.CityId, request.TelNumbers);
 
                 return Ok();

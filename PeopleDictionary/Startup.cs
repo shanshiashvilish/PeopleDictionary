@@ -17,10 +17,7 @@ namespace PeopleDictionary.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<PeopleDictionaryDbContext>(options =>
-            {
-                options.UseSqlServer(Configuration.GetConnectionString("DbConnection"));
-            });
+            services.AddDbContext<PeopleDictionaryDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
 
             services.AddScoped<CityDataSeeder>();
             services.AddPersonServices();
@@ -29,10 +26,7 @@ namespace PeopleDictionary.Api
             services.AddMvc();
             services.AddControllers();
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "PeopleDictionary.Api", Version = "v1" });
-            });
+            services.AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApiInfo { Title = "PeopleDictionary.Api", Version = "v1" }));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, CityDataSeeder cityDataSeeder)
