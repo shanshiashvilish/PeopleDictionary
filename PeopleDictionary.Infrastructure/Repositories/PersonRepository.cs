@@ -21,9 +21,10 @@ namespace PeopleDictionary.Infrastructure.Repositories
 
         public async Task<IEnumerable<Person>>? GetRelatedPeopleByTypeAsync(RelationEnums relationType)
         {
-            return await _dbContext.People.Include(p => p.RelatedPeople)
-           .Where(p => p.RelatedPeople.Any(rp => rp.RelationType == relationType))
-           .ToListAsync();
+            return await _dbContext.People.Include(p => p.City)
+                                          .Include(p => p.RelatedPeople)
+                         .Where(p => p.RelatedPeople.Any(rp => rp.RelationType == relationType))
+                         .ToListAsync();
         }
 
         public async Task<IEnumerable<Person>> QuickSearchAsync(string name, string lastname, string personalId)
