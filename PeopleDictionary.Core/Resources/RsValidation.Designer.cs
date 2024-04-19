@@ -59,5 +59,185 @@ namespace PeopleDictionary.Core.Resources {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to find city with provided ID.
+        /// </summary>
+        public static string CityNotFound {
+            get {
+                return ResourceManager.GetString("CityNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Provided search criterias are empty or incorrect.
+        /// </summary>
+        public static string EmptyValues {
+            get {
+                return ResourceManager.GetString("EmptyValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Person ID must be greater than 0.
+        /// </summary>
+        public static string IdMinValue {
+            get {
+                return ResourceManager.GetString("IdMinValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image upload process was failed.
+        /// </summary>
+        public static string ImageUploadFailed {
+            get {
+                return ResourceManager.GetString("ImageUploadFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid gender.
+        /// </summary>
+        public static string InvalidGender {
+            get {
+                return ResourceManager.GetString("InvalidGender", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid telephone number type.
+        /// </summary>
+        public static string InvalidTelNumberType {
+            get {
+                return ResourceManager.GetString("InvalidTelNumberType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name must contain only Georgian or English symbols, but not the mixture of the two.
+        /// </summary>
+        public static string NameOrLastNameContentWrong {
+            get {
+                return ResourceManager.GetString("NameOrLastNameContentWrong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name/Lastname must be between 2 and 50 characters.
+        /// </summary>
+        public static string NameOrLastNameMinMaxValue {
+            get {
+                return ResourceManager.GetString("NameOrLastNameMinMaxValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name/Lastname is required.
+        /// </summary>
+        public static string NameOrLastnameRequired {
+            get {
+                return ResourceManager.GetString("NameOrLastnameRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No matching records found with provided fields.
+        /// </summary>
+        public static string NoMatchingRecords {
+            get {
+                return ResourceManager.GetString("NoMatchingRecords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PersonalId must be exactly 11 digits.
+        /// </summary>
+        public static string PersonalIdExactValue {
+            get {
+                return ResourceManager.GetString("PersonalIdExactValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Personal ID is required.
+        /// </summary>
+        public static string PersonalIdIsRequired {
+            get {
+                return ResourceManager.GetString("PersonalIdIsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PersonalId must contain only digits.
+        /// </summary>
+        public static string PersonalIdOnlyDigits {
+            get {
+                return ResourceManager.GetString("PersonalIdOnlyDigits", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to find person with provided ID.
+        /// </summary>
+        public static string PersonNotFound {
+            get {
+                return ResourceManager.GetString("PersonNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date of birth must correspond to someone who is at least 18 years old.
+        /// </summary>
+        public static string PersonUnderAge {
+            get {
+                return ResourceManager.GetString("PersonUnderAge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to find records with provided type.
+        /// </summary>
+        public static string RelationTypeNotFound {
+            get {
+                return ResourceManager.GetString("RelationTypeNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Telephone number is required.
+        /// </summary>
+        public static string TelNumberIsRequired {
+            get {
+                return ResourceManager.GetString("TelNumberIsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Telephone number must be between 4 and 50 characters.
+        /// </summary>
+        public static string TelNumberLenght {
+            get {
+                return ResourceManager.GetString("TelNumberLenght", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Telephone number must contain only digits.
+        /// </summary>
+        public static string TelNumberOnlyDigits {
+            get {
+                return ResourceManager.GetString("TelNumberOnlyDigits", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Something went wrong.
+        /// </summary>
+        public static string UnknownError {
+            get {
+                return ResourceManager.GetString("UnknownError", resourceCulture);
+            }
+        }
     }
 }

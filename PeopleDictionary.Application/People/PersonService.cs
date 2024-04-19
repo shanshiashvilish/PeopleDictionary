@@ -3,7 +3,7 @@ using PeopleDictionary.Core.Base;
 using PeopleDictionary.Core.Enums;
 using PeopleDictionary.Core.People;
 using PeopleDictionary.Core.RelatedPeople;
-using System;
+using PeopleDictionary.Core.Resources;
 
 namespace PeopleDictionary.Application.People
 {
@@ -27,7 +27,7 @@ namespace PeopleDictionary.Application.People
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return new BaseModel<bool>(false, default, "Unexpected Error!");
+                return new BaseModel<bool>(false, default, RsValidation.UnknownError);
             }
         }
 
@@ -39,19 +39,19 @@ namespace PeopleDictionary.Application.People
 
                 if (person == null || person.Data == null)
                 {
-                    return new BaseModel<bool>(false, default, $"Unable to find person with ID {id}");
+                    return new BaseModel<bool>(false, default, RsValidation.PersonNotFound);
                 }
 
                 if (cityId < 1)
                 {
-                    return new BaseModel<bool>(false, default, "City ID is not provided");
+                    return new BaseModel<bool>(false, default, RsValidation.CityNotFound);
                 }
 
                 var city = await _repository.GetCityById(cityId ?? -1);
 
                 if (city == null)
                 {
-                    return new BaseModel<bool>(false, default, $"Unable to find a city with id {cityId}");
+                    return new BaseModel<bool>(false, default, RsValidation.CityNotFound);
                 }
 
                 person.Data.EditData(id, name, lastname, gender, personalId, DateOfBirth, city, telNumbers);
@@ -62,7 +62,7 @@ namespace PeopleDictionary.Application.People
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return new BaseModel<bool>(false, default, $"Unexpected error!");
+                return new BaseModel<bool>(false, default, RsValidation.UnknownError);
             }
         }
 
@@ -74,7 +74,7 @@ namespace PeopleDictionary.Application.People
 
                 if (person == null)
                 {
-                    return new BaseModel<Person?>(false, default, $"Unable to find person with id {id}");
+                    return new BaseModel<Person?>(false, default, RsValidation.PersonNotFound);
                 }
 
                 return new BaseModel<Person?>(true, person, string.Empty);
@@ -82,7 +82,7 @@ namespace PeopleDictionary.Application.People
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return default;
+                return new BaseModel<Person>(false, default, RsValidation.UnknownError);
             }
         }
 
@@ -94,14 +94,16 @@ namespace PeopleDictionary.Application.People
 
                 if (person == null || person.Data == null)
                 {
-                    return new BaseModel<bool>(false, default, $"Unable to find person with id {id}");
+                    return new BaseModel<bool>(false, default, RsValidation.PersonNotFound);
                 }
 
+                // TO DO: validate file result. It must be image file
+                
                 var uploadResult = await UploadImageAsync(person.Data, file);
 
                 if (!uploadResult)
                 {
-                    return new BaseModel<bool>(false, default, $"Image upload process was failed. Person id: {id}");
+                    return new BaseModel<bool>(false, default, RsValidation.ImageUploadFailed);
                 }
 
                 return new BaseModel<bool>(true, default, string.Empty);
@@ -109,7 +111,7 @@ namespace PeopleDictionary.Application.People
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return new BaseModel<bool>(false, default, $"Unexpected error!");
+                return new BaseModel<bool>(false, default, RsValidation.UnknownError);
             }
         }
 
@@ -122,7 +124,7 @@ namespace PeopleDictionary.Application.People
 
                 if (person == null || person.Data == null || relatedPerson == null || relatedPerson.Data == null)
                 {
-                    return new BaseModel<bool>(false, default, "Unable to find the person or the related one");
+                    return new BaseModel<bool>(false, default, RsValidation.PersonNotFound);
                 }
 
                 person.Data.AddRelation(new RelatedPerson { Person = person.Data, RelatedTo = relatedPerson.Data, Type = type });
@@ -134,7 +136,7 @@ namespace PeopleDictionary.Application.People
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return new BaseModel<bool>(false, default, $"Unexpected error!");
+                return new BaseModel<bool>(false, default, RsValidation.UnknownError);
             }
         }
 
@@ -146,7 +148,7 @@ namespace PeopleDictionary.Application.People
 
                 if (person == null || person.Data == null || person.Data.Relations == null)
                 {
-                    return new BaseModel<bool>(false, default, "Unable to find the person or the related one");
+                    return new BaseModel<bool>(false, default, RsValidation.PersonNotFound);
                 }
 
                 person.Data.RemoveRelation(relationId);
@@ -157,7 +159,7 @@ namespace PeopleDictionary.Application.People
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return new BaseModel<bool>(false, default, $"Unexpected error!");
+                return new BaseModel<bool>(false, default, RsValidation.UnknownError);
             }
         }
 
@@ -167,14 +169,14 @@ namespace PeopleDictionary.Application.People
             {
                 if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(lastname) && string.IsNullOrEmpty(personalId))
                 {
-                    return new BaseModel<List<Person>>(false, default, "All the search criterias are empty");
+                    return new BaseModel<List<Person>>(false, default, RsValidation.EmptyValues);
                 }
 
                 var result = await _repository.QuickSearchAsync(name, lastname, personalId);
 
                 if (!result.Any())
                 {
-                    return new BaseModel<List<Person>>(false, default, "No matching records found with provided fields");
+                    return new BaseModel<List<Person>>(false, default, RsValidation.NoMatchingRecords);
                 }
 
                 return new BaseModel<List<Person>>(true, result.ToList(), string.Empty);
@@ -182,7 +184,27 @@ namespace PeopleDictionary.Application.People
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return new BaseModel<List<Person>>(false, default, $"Unexpected error!");
+                return new BaseModel<List<Person>>(false, default, RsValidation.UnknownError);
+            }
+        }
+        
+        public async Task<BaseModel<List<Person>>>? GetRelatedPeopleByTypeAsync(RelationEnums relationType)
+        {
+            try
+            {
+                var result = (await _repository.GetRelatedPeopleByTypeAsync(relationType)).ToList();
+
+                if (result != null && result.Count > 0)
+                {
+                    return new BaseModel<List<Person>>(false, default, RsValidation.RelationTypeNotFound);
+                }
+
+                return new BaseModel<List<Person>>(true, result.ToList(), string.Empty);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return new BaseModel<List<Person>>(false, default, RsValidation.UnknownError);
             }
         }
 
@@ -195,14 +217,14 @@ namespace PeopleDictionary.Application.People
                 if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(lastname) && string.IsNullOrEmpty(personalId) &&
                     string.IsNullOrEmpty(city) && dateOfBirth == null && dateOfCreate == null && dateOfUpdate == null)
                 {
-                    return new BaseModel<List<Person>>(false, default, "All the search criterias are empty");
+                    return new BaseModel<List<Person>>(false, default, RsValidation.EmptyValues);
                 }
 
                 var result = await _repository.DetailedSearchAsync(name, lastname, personalId, city, gender, dateOfBirth, dateOfCreate, dateOfUpdate);
 
                 if (!result.Any())
                 {
-                    return new BaseModel<List<Person>>(false, default, "No matching records found with provided fields");
+                    return new BaseModel<List<Person>>(false, default, RsValidation.EmptyValues);
                 }
 
                 return new BaseModel<List<Person>>(true, result.ToList(), string.Empty);
@@ -210,30 +232,9 @@ namespace PeopleDictionary.Application.People
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return new BaseModel<List<Person>>(false, default, $"Unexpected error!");
+                return new BaseModel<List<Person>>(false, default, RsValidation.UnknownError);
             }
         }
-
-        public async Task<BaseModel<List<Person>>>? GetRelatedPeopleByTypeAsync(RelationEnums relationType)
-        {
-            try
-            {
-                var result = (await _repository.GetRelatedPeopleByTypeAsync(relationType)).ToList();
-
-                if (result != null && result.Count > 0)
-                {
-                    return new BaseModel<List<Person>>(false, default, "Unable to find records with provided type");
-                }
-
-                return new BaseModel<List<Person>>(true, result.ToList(), string.Empty);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return new BaseModel<List<Person>>(false, default, $"Unexpected error!");
-            }
-        }
-
 
         public void Remove(int id)
         {
@@ -263,7 +264,7 @@ namespace PeopleDictionary.Application.People
                 }
 
                 string fileExtension = Path.GetExtension(file.FileName);
-                string fileName = $"{person.Id}{fileExtension}";
+                string fileName = $"{person.Id}.{fileExtension}";
                 string filePath = Path.Combine(imgFolderPath, fileName);
 
                 using (var stream = new FileStream(filePath, FileMode.Create))

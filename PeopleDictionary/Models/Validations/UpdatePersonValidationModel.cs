@@ -5,14 +5,14 @@ using PeopleDictionary.Core.Resources;
 
 namespace PeopleDictionary.Api.Models.Validations
 {
-    public class CreatePersonValidationModel : AbstractValidator<CreatePersonRequest>
+    public class UpdatePersonValidationModel : AbstractValidator<UpdatePersonRequest>
     {
-        public CreatePersonValidationModel(CreatePersonRequest model)
+        public UpdatePersonValidationModel(UpdatePersonRequest request)
         {
             RuleFor(x => x.Name)
-                .NotEmpty().WithMessage(RsValidation.NameOrLastnameRequired)
-                .Length(2, 50).WithMessage(RsValidation.NameOrLastNameMinMaxValue)
-                .Matches(@"^[\p{L}]+$").WithMessage(RsValidation.NameOrLastNameContentWrong);
+              .NotEmpty().WithMessage(RsValidation.NameOrLastnameRequired)
+              .Length(2, 50).WithMessage(RsValidation.NameOrLastNameMinMaxValue)
+              .Matches(@"^[\p{L}]+$").WithMessage(RsValidation.NameOrLastNameContentWrong);
 
             RuleFor(x => x.Lastname)
                 .NotEmpty().WithMessage(RsValidation.NameOrLastnameRequired)
@@ -29,6 +29,7 @@ namespace PeopleDictionary.Api.Models.Validations
 
             RuleFor(x => x.DateOfBirth)
                 .Must(BeAtLeast18YearsOld).WithMessage(RsValidation.PersonUnderAge);
+
 
             RuleForEach(x => x.TelNumbers)
                 .SetValidator(new TelephoneNumbersValidator());
@@ -47,6 +48,7 @@ namespace PeopleDictionary.Api.Models.Validations
                     .Matches(@"^\d+$").WithMessage(RsValidation.TelNumberOnlyDigits);
             }
         }
+
 
         #region Private Methods
 
