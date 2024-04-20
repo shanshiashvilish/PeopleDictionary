@@ -98,7 +98,7 @@ namespace PeopleDictionary.Application.People
                 }
 
                 // TO DO: validate file result. It must be image file
-                
+
                 var uploadResult = await UploadImageAsync(person.Data, file);
 
                 if (!uploadResult)
@@ -163,31 +163,31 @@ namespace PeopleDictionary.Application.People
             }
         }
 
-        public async Task<BaseModel<List<Person>>>? QuickSearchAsync(string name, string lastname, string personalId)
+        public async Task<BaseModel<PagedResult<Person>>>? QuickSearchAsync(string name, string lastname, string personalId, int pageNumber, int pageSize)
         {
             try
             {
                 if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(lastname) && string.IsNullOrEmpty(personalId))
                 {
-                    return new BaseModel<List<Person>>(false, default, RsValidation.EmptyValues);
+                    return new BaseModel<PagedResult<Person>>(false, default, RsValidation.EmptyValues);
                 }
 
-                var result = await _repository.QuickSearchAsync(name, lastname, personalId);
+                var result = await _repository.QuickSearchAsync(name, lastname, personalId, pageNumber, pageSize);
 
-                if (!result.Any())
+                if (!result.Items.Any())
                 {
-                    return new BaseModel<List<Person>>(false, default, RsValidation.NoMatchingRecords);
+                    return new BaseModel<PagedResult<Person>>(false, default, RsValidation.NoMatchingRecords);
                 }
 
-                return new BaseModel<List<Person>>(true, result.ToList(), string.Empty);
+                return new BaseModel<PagedResult<Person>>(true, result, string.Empty);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return new BaseModel<List<Person>>(false, default, RsValidation.UnknownError);
+                return new BaseModel<PagedResult<Person?>>(false, default, RsValidation.UnknownError);
             }
         }
-        
+
         public async Task<BaseModel<List<Person>>>? GetRelatedPeopleByTypeAsync(RelationEnums relationType)
         {
             try

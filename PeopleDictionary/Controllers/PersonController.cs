@@ -106,7 +106,7 @@ namespace PeopleDictionary.Api.Controllers
         }
 
         [HttpDelete]
-        public ActionResult RemoveRelation([FromQuery] int personId)
+        public ActionResult<BaseModel<bool>> RemoveRelation([FromQuery] int personId)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
@@ -129,7 +129,7 @@ namespace PeopleDictionary.Api.Controllers
         }
 
         [HttpGet("/quick")]
-        public async Task<ActionResult<BaseModel<List<GetPersonResponse>>>>? QuickSearchAsync([FromQuery] QuickSearchRequest request)
+        public async Task<ActionResult<BaseModel<PagedResult<GetPersonResponse>>>>? QuickSearchAsync([FromQuery] QuickSearchRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
@@ -144,14 +144,14 @@ namespace PeopleDictionary.Api.Controllers
                     return BadRequest(new BaseModel<GetPersonResponse?>(false, default, string.Join(",\n", validate.Errors.Select(e => e.ErrorMessage))));
                 }
 
-                var result = await _personService.QuickSearchAsync(request.Name, request.Lastname, request.PersonalId);
+                var result = await _personService.QuickSearchAsync(request.Name, request.Lastname, request.PersonalId, request.PageNumber, request.PageSize);
 
                 if (result == null || !result.IsSuccess)
                 {
                     return BadRequest(new BaseModel<GetPersonResponse?>(false, default, result?.Message));
                 }
 
-                return Ok(await GetPersonResponse.BuildFromList(result));
+                return Ok(await GetPersonResponse.BuildFromPaginatedResult(result));
             }
             catch (Exception ex)
             {
@@ -174,7 +174,7 @@ namespace PeopleDictionary.Api.Controllers
 
                 var result = await _personService.UploadOrUpdateImageAsync(id, file);
 
-                if(!result.IsSuccess)
+                if (!result.IsSuccess)
                 {
                     return BadRequest(new BaseModel<bool>(false, default, result?.Message));
                 }

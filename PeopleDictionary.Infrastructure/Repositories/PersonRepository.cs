@@ -3,6 +3,7 @@ using PeopleDictionary.Infrastructure.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using PeopleDictionary.Core.Enums;
 using PeopleDictionary.Core.Cities;
+using PeopleDictionary.Core.Base;
 
 namespace PeopleDictionary.Infrastructure.Repositories
 {
@@ -29,14 +30,31 @@ namespace PeopleDictionary.Infrastructure.Repositories
                          .ToListAsync();
         }
 
-        public async Task<IEnumerable<Person>> QuickSearchAsync(string name, string lastname, string personalId)
+        public async Task<PagedResult<Person>?> QuickSearchAsync(string name, string lastname, string personalId, int pageNumber, int pageSize)
         {
-            return await _dbContext.People
+            int totalItems = await _dbContext.People
+                            .CountAsync(p =>
+                                EF.Functions.Like(p.Name, $"%{name}%") &&
+                                EF.Functions.Like(p.Lastname, $"%{lastname}%") &&
+                                EF.Functions.Like(p.PersonalId, $"%{personalId}%"));
+
+            var query = _dbContext.People
                             .Where(p =>
                                 EF.Functions.Like(p.Name, $"%{name}%") &&
                                 EF.Functions.Like(p.Lastname, $"%{lastname}%") &&
-                                EF.Functions.Like(p.PersonalId, $"%{personalId}%"))
-                            .ToListAsync();
+                                EF.Functions.Like(p.PersonalId, $"%{personalId}%"));
+
+            int skipCount = (pageNumber - 1) * pageSize;
+
+            query = query.Skip(skipCount).Take(pageSize);
+
+            var items = await query.ToListAsync();
+
+            return new PagedResult<Person>
+            {
+                Items = items,
+                TotalCount = totalItems
+            };
         }
 
         public async Task<IEnumerable<Person>> DetailedSearchAsync(string? name, string? lastname, string? personalId, string? city, GenderEnums gender, DateTime? dateOfBirth, DateTime? dateOfCreate, DateTime? dateOfUpdate)

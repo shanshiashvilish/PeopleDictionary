@@ -44,6 +44,7 @@ namespace PeopleDictionary.Api.Models.Responses
             });
         }
 
+
         public static Task<BaseModel<List<GetPersonResponse>>> BuildFromList(BaseModel<List<Person>>? person)
         {
             if (person == null || person.Data == null)
@@ -82,6 +83,49 @@ namespace PeopleDictionary.Api.Models.Responses
             });
         }
 
+        public static Task<BaseModel<PagedResult<GetPersonResponse?>>> BuildFromPaginatedResult(BaseModel<PagedResult<Person>>? person)
+        {
+            if (person == null || person.Data == null)
+            {
+                return Task.FromResult(new BaseModel<PagedResult<GetPersonResponse?>>()
+                {
+                    IsSuccess = person?.IsSuccess ?? false,
+                    StatusCode = person?.StatusCode ?? StatusCodeEnums.UnknownError,
+                    Code = person?.Code ?? -1,
+                    Data = new PagedResult<GetPersonResponse?>(),
+                    Message = person?.Message
+                });
+            }
+
+            var getByIdResponses = person.Data.Items.Select(p => new GetPersonResponse()
+            {
+                Id = p.Id,
+                CityId = p.CityId,
+                PersonalId = p.PersonalId,
+                Name = p.Name,
+                Lastname = p.Lastname,
+                Image = p.Image,
+                RelatedPeople = p.Relations?.Select(rp => rp).ToList(),
+                TelNumbers = p.TelNumbers,
+                Gender = p.Gender,
+                DateOfBirth = p.DateOfBirth.Date
+            }).ToList();
+
+            var result = new PagedResult<GetPersonResponse?>()
+            {
+                Items = getByIdResponses,
+                TotalCount = person.Data.TotalCount
+            };
+
+            return Task.FromResult(new BaseModel<PagedResult<GetPersonResponse?>>()
+            {
+                IsSuccess = person.IsSuccess,
+                StatusCode = person.StatusCode,
+                Code = person.Code,
+                Data = result,
+                Message = person.Message
+            });
+        }
     }
 }
 
