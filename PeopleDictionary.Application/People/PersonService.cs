@@ -213,7 +213,6 @@ namespace PeopleDictionary.Application.People
         {
             try
             {
-                // Check if all search parameters are empty or null
                 if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(lastname) && string.IsNullOrEmpty(personalId) &&
                     string.IsNullOrEmpty(city) && dateOfBirth == null && dateOfCreate == null && dateOfUpdate == null)
                 {

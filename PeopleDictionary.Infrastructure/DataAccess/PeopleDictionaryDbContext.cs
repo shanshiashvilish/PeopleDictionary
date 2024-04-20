@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PeopleDictionary.Core.Cities;
 using PeopleDictionary.Core.People;
+using PeopleDictionary.Core.RelatedPeople;
 using PeopleDictionary.Infrastructure.DataAccess.EntityConfiguration;
 
 namespace PeopleDictionary.Infrastructure.DataAccess
@@ -8,7 +9,7 @@ namespace PeopleDictionary.Infrastructure.DataAccess
     public class PeopleDictionaryDbContext : DbContext
     {
         public DbSet<Person> People { get; set; }
-        public DbSet<Person> RelatedPeople { get; set; }
+        public DbSet<RelatedPerson> RelatedPeople { get; set; }
         public DbSet<City> Cities { get; set; }
 
 
