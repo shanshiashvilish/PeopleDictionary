@@ -106,7 +106,7 @@ namespace PeopleDictionary.Api.Controllers
         }
 
         [HttpDelete]
-        public ActionResult<BaseModel<bool>> RemoveRelation([FromQuery] int personId)
+        public ActionResult<BaseModel<bool>> DeletePerson([FromQuery] int personId)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
@@ -152,6 +152,29 @@ namespace PeopleDictionary.Api.Controllers
                 }
 
                 return Ok(await GetPersonResponse.BuildFromPaginatedResult(result));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("/relations")]
+        public async Task<ActionResult<BaseModel<GetRelationsByTypeResponse?>>> QuickSearchAsync([FromQuery] RelationEnums type)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            try
+            {
+                var result = await _personService.GetRelatedPeopleByTypeAsync(type);
+
+                if (result == null || !result.IsSuccess)
+                {
+                    return BadRequest(new BaseModel<GetPersonResponse?>(false, default, result?.Message));
+                }
+
+                return Ok(await GetRelationsByTypeResponse.BuildFromList(result));
             }
             catch (Exception ex)
             {

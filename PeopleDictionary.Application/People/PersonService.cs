@@ -192,11 +192,11 @@ namespace PeopleDictionary.Application.People
         {
             try
             {
-                var result = (await _repository.GetRelatedPeopleByTypeAsync(relationType)).ToList();
+                var result = await _repository.GetRelatedPeopleByTypeAsync(relationType);
 
-                if (result != null && result.Count > 0)
+                if (result == null || !result.Any())
                 {
-                    return new BaseModel<List<Person>>(false, default, RsValidation.RelationTypeNotFound);
+                    return new BaseModel<List<Person>>(false, default, "No related people found for this relation type.");
                 }
 
                 return new BaseModel<List<Person>>(true, result.ToList(), string.Empty);
@@ -204,7 +204,7 @@ namespace PeopleDictionary.Application.People
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return new BaseModel<List<Person>>(false, default, RsValidation.UnknownError);
+                return new BaseModel<List<Person>>(false, default, "Error occurred while fetching related people.");
             }
         }
 

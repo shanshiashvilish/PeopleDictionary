@@ -9,6 +9,7 @@ namespace PeopleDictionary.Core.People
         Task<BaseModel<bool>> CreateAsync(Person person);
         Task<BaseModel<Person?>> GetByIdAsync(int id);
         Task<BaseModel<PagedResult<Person>>>? QuickSearchAsync(string name, string lastname, string personalId, int pageNumber, int pageSize);
+        Task<BaseModel<List<Person>>>? GetRelatedPeopleByTypeAsync(RelationEnums relationType);
         Task<BaseModel<bool>> UploadOrUpdateImageAsync(int personId, IFormFile file);
         Task<BaseModel<bool>> AddRelationAsync(int personId, int relatedId, RelationEnums type);
         Task<BaseModel<bool>> RemoveRelationAsync(int personId, int relationId);
