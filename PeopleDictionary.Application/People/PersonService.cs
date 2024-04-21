@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using PeopleDictionary.Core.Base;
 using PeopleDictionary.Core.Enums;
+using PeopleDictionary.Core.Helpers;
 using PeopleDictionary.Core.People;
 using PeopleDictionary.Core.RelatedPeople;
 using PeopleDictionary.Core.Resources;
@@ -10,10 +11,12 @@ namespace PeopleDictionary.Application.People
     public class PersonService : IPersonService
     {
         private readonly IPersonRepository _repository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public PersonService(IPersonRepository repository)
+        public PersonService(IPersonRepository repository, IHttpContextAccessor httpContextAccessor)
         {
             _repository = repository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<BaseModel<bool>> CreateAsync(Person person)
@@ -27,7 +30,7 @@ namespace PeopleDictionary.Application.People
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return new BaseModel<bool>(false, default, RsValidation.UnknownError);
+                return new BaseModel<bool>(false, default, RsValidation.UnknownError.GetResourceTranslation(_httpContextAccessor));
             }
         }
 
@@ -39,19 +42,19 @@ namespace PeopleDictionary.Application.People
 
                 if (person == null || person.Data == null)
                 {
-                    return new BaseModel<bool>(false, default, RsValidation.PersonNotFound);
+                    return new BaseModel<bool>(false, default, RsValidation.PersonNotFound.GetResourceTranslation(_httpContextAccessor));
                 }
 
                 if (cityId < 1)
                 {
-                    return new BaseModel<bool>(false, default, RsValidation.CityNotFound);
+                    return new BaseModel<bool>(false, default, RsValidation.CityNotFound.GetResourceTranslation(_httpContextAccessor));
                 }
 
                 var city = await _repository.GetCityById(cityId ?? -1);
 
                 if (city == null)
                 {
-                    return new BaseModel<bool>(false, default, RsValidation.CityNotFound);
+                    return new BaseModel<bool>(false, default, RsValidation.CityNotFound.GetResourceTranslation(_httpContextAccessor));
                 }
 
                 person.Data.EditData(id, name, lastname, gender, personalId, DateOfBirth, city, telNumbers);
@@ -62,7 +65,7 @@ namespace PeopleDictionary.Application.People
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return new BaseModel<bool>(false, default, RsValidation.UnknownError);
+                return new BaseModel<bool>(false, default, RsValidation.UnknownError.GetResourceTranslation(_httpContextAccessor));
             }
         }
 
@@ -74,7 +77,7 @@ namespace PeopleDictionary.Application.People
 
                 if (person == null)
                 {
-                    return new BaseModel<Person?>(false, default, RsValidation.PersonNotFound);
+                    return new BaseModel<Person?>(false, default, RsValidation.PersonNotFound.GetResourceTranslation(_httpContextAccessor));
                 }
 
                 return new BaseModel<Person?>(true, person, string.Empty);
@@ -82,7 +85,7 @@ namespace PeopleDictionary.Application.People
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return new BaseModel<Person>(false, default, RsValidation.UnknownError);
+                return new BaseModel<Person>(false, default, RsValidation.UnknownError.GetResourceTranslation(_httpContextAccessor));
             }
         }
 
@@ -94,7 +97,7 @@ namespace PeopleDictionary.Application.People
 
                 if (person == null || person.Data == null)
                 {
-                    return new BaseModel<bool>(false, default, RsValidation.PersonNotFound);
+                    return new BaseModel<bool>(false, default, RsValidation.PersonNotFound.GetResourceTranslation(_httpContextAccessor));
                 }
 
                 // TO DO: validate file result. It must be image file
@@ -103,7 +106,7 @@ namespace PeopleDictionary.Application.People
 
                 if (!uploadResult)
                 {
-                    return new BaseModel<bool>(false, default, RsValidation.ImageUploadFailed);
+                    return new BaseModel<bool>(false, default, RsValidation.ImageUploadFailed.GetResourceTranslation(_httpContextAccessor));
                 }
 
                 return new BaseModel<bool>(true, default, string.Empty);
@@ -111,7 +114,7 @@ namespace PeopleDictionary.Application.People
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return new BaseModel<bool>(false, default, RsValidation.UnknownError);
+                return new BaseModel<bool>(false, default, RsValidation.UnknownError.GetResourceTranslation(_httpContextAccessor));
             }
         }
 
@@ -124,7 +127,7 @@ namespace PeopleDictionary.Application.People
 
                 if (person == null || person.Data == null || relatedPerson == null || relatedPerson.Data == null)
                 {
-                    return new BaseModel<bool>(false, default, RsValidation.PersonNotFound);
+                    return new BaseModel<bool>(false, default, RsValidation.PersonNotFound.GetResourceTranslation(_httpContextAccessor));
                 }
 
                 person.Data.AddRelation(new RelatedPerson { Person = person.Data, RelatedTo = relatedPerson.Data, Type = type });
@@ -136,7 +139,7 @@ namespace PeopleDictionary.Application.People
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return new BaseModel<bool>(false, default, RsValidation.UnknownError);
+                return new BaseModel<bool>(false, default, RsValidation.UnknownError.GetResourceTranslation(_httpContextAccessor));
             }
         }
 
@@ -148,7 +151,7 @@ namespace PeopleDictionary.Application.People
 
                 if (person == null || person.Data == null || person.Data.Relations == null)
                 {
-                    return new BaseModel<bool>(false, default, RsValidation.PersonNotFound);
+                    return new BaseModel<bool>(false, default, RsValidation.PersonNotFound.GetResourceTranslation(_httpContextAccessor));
                 }
 
                 person.Data.RemoveRelation(relationId);
@@ -159,7 +162,7 @@ namespace PeopleDictionary.Application.People
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return new BaseModel<bool>(false, default, RsValidation.UnknownError);
+                return new BaseModel<bool>(false, default, RsValidation.UnknownError.GetResourceTranslation(_httpContextAccessor));
             }
         }
 
@@ -169,14 +172,14 @@ namespace PeopleDictionary.Application.People
             {
                 if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(lastname) && string.IsNullOrEmpty(personalId))
                 {
-                    return new BaseModel<PagedResult<Person>>(false, default, RsValidation.EmptyValues);
+                    return new BaseModel<PagedResult<Person>>(false, default, RsValidation.EmptyValues.GetResourceTranslation(_httpContextAccessor));
                 }
 
                 var result = await _repository.QuickSearchAsync(name, lastname, personalId, pageNumber, pageSize);
 
                 if (!result.Items.Any())
                 {
-                    return new BaseModel<PagedResult<Person>>(false, default, RsValidation.NoMatchingRecords);
+                    return new BaseModel<PagedResult<Person>>(false, default, RsValidation.NoMatchingRecords.GetResourceTranslation(_httpContextAccessor));
                 }
 
                 return new BaseModel<PagedResult<Person>>(true, result, string.Empty);
@@ -184,7 +187,7 @@ namespace PeopleDictionary.Application.People
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return new BaseModel<PagedResult<Person?>>(false, default, RsValidation.UnknownError);
+                return new BaseModel<PagedResult<Person?>>(false, default, RsValidation.UnknownError.GetResourceTranslation(_httpContextAccessor));
             }
         }
 
@@ -204,7 +207,7 @@ namespace PeopleDictionary.Application.People
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return new BaseModel<List<Person>>(false, default, "Error occurred while fetching related people.");
+                return new BaseModel<List<Person>>(false, default, RsValidation.UnknownError.GetResourceTranslation(_httpContextAccessor));
             }
         }
 
@@ -216,14 +219,14 @@ namespace PeopleDictionary.Application.People
                 if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(lastname) && string.IsNullOrEmpty(personalId) &&
                     string.IsNullOrEmpty(city) && dateOfBirth == null && dateOfCreate == null && dateOfUpdate == null)
                 {
-                    return new BaseModel<List<Person>>(false, default, RsValidation.EmptyValues);
+                    return new BaseModel<List<Person>>(false, default, RsValidation.EmptyValues.GetResourceTranslation(_httpContextAccessor));
                 }
 
                 var result = await _repository.DetailedSearchAsync(name, lastname, personalId, city, gender, dateOfBirth, dateOfCreate, dateOfUpdate);
 
                 if (!result.Any())
                 {
-                    return new BaseModel<List<Person>>(false, default, RsValidation.EmptyValues);
+                    return new BaseModel<List<Person>>(false, default, RsValidation.EmptyValues.GetResourceTranslation(_httpContextAccessor));
                 }
 
                 return new BaseModel<List<Person>>(true, result.ToList(), string.Empty);
@@ -231,7 +234,7 @@ namespace PeopleDictionary.Application.People
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return new BaseModel<List<Person>>(false, default, RsValidation.UnknownError);
+                return new BaseModel<List<Person>>(false, default, RsValidation.UnknownError.GetResourceTranslation(_httpContextAccessor));
             }
         }
 

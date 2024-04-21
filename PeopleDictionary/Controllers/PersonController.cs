@@ -4,6 +4,7 @@ using PeopleDictionary.Api.Models.Responses;
 using PeopleDictionary.Api.Models.Validations;
 using PeopleDictionary.Core.Base;
 using PeopleDictionary.Core.Enums;
+using PeopleDictionary.Core.Helpers;
 using PeopleDictionary.Core.People;
 using PeopleDictionary.Core.Resources;
 
@@ -14,10 +15,12 @@ namespace PeopleDictionary.Api.Controllers
     public class PersonController : ControllerBase
     {
         private readonly IPersonService _personService;
+        private readonly IHttpContextAccessor? _httpContextAccessor;
 
-        public PersonController(IPersonService personService)
+        public PersonController(IPersonService personService, IHttpContextAccessor? httpContextAccessor)
         {
             _personService = personService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpPost]
@@ -56,7 +59,7 @@ namespace PeopleDictionary.Api.Controllers
             {
                 if (id < 1)
                 {
-                    return BadRequest(new BaseModel<bool>(false, default, RsValidation.IdMinValue));
+                    return BadRequest(new BaseModel<bool>(false, default, RsValidation.IdMinValue.GetResourceTranslation(_httpContextAccessor)));
                 }
 
                 var result = await _personService.GetByIdAsync(id);
@@ -115,7 +118,7 @@ namespace PeopleDictionary.Api.Controllers
             {
                 if (personId < 1)
                 {
-                    return BadRequest(new BaseModel<bool>(false, default, RsValidation.IdMinValue));
+                    return BadRequest(new BaseModel<bool>(false, default, RsValidation.IdMinValue.GetResourceTranslation(_httpContextAccessor)));
                 }
 
                 _personService.Remove(personId);
@@ -192,7 +195,7 @@ namespace PeopleDictionary.Api.Controllers
             {
                 if (id < 1)
                 {
-                    return BadRequest(new BaseModel<bool>(false, default, RsValidation.IdMinValue));
+                    return BadRequest(new BaseModel<bool>(false, default, RsValidation.IdMinValue.GetResourceTranslation(_httpContextAccessor)));
                 }
 
                 var result = await _personService.UploadOrUpdateImageAsync(id, file);
@@ -220,7 +223,7 @@ namespace PeopleDictionary.Api.Controllers
             {
                 if (personId < 1 || relatedId < 1)
                 {
-                    return BadRequest(new BaseModel<bool>(false, default, RsValidation.IdMinValue));
+                    return BadRequest(new BaseModel<bool>(false, default, RsValidation.IdMinValue.GetResourceTranslation(_httpContextAccessor)));
                 }
 
                 var result = await _personService.AddRelationAsync(personId, relatedId, type);
@@ -248,7 +251,7 @@ namespace PeopleDictionary.Api.Controllers
             {
                 if (personId < 1 || relatedId < 1)
                 {
-                    return BadRequest(new BaseModel<bool>(false, default, RsValidation.IdMinValue));
+                    return BadRequest(new BaseModel<bool>(false, default, RsValidation.IdMinValue.GetResourceTranslation(_httpContextAccessor)));
                 }
 
                 var result = await _personService.RemoveRelationAsync(personId, relatedId);
