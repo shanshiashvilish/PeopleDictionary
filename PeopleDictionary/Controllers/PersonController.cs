@@ -185,7 +185,7 @@ namespace PeopleDictionary.Api.Controllers
             }
         }
 
-        [HttpPut("image")]
+        [HttpPut("{id}/image")]
         public async Task<ActionResult<BaseModel<bool>>> UploadOrUpdateImageAsync([FromRoute] int id, [FromForm] IFormFile file)
         {
             if (!ModelState.IsValid)
