@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using PeopleDictionary.Api.Models.Requests;
+using PeopleDictionary.Core.Helpers;
 using PeopleDictionary.Core.People;
 using PeopleDictionary.Core.Resources;
 
@@ -7,28 +8,32 @@ namespace PeopleDictionary.Api.Models.Validations
 {
     public class CreatePersonValidationModel : AbstractValidator<CreatePersonRequest>
     {
-        public CreatePersonValidationModel(CreatePersonRequest model)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public CreatePersonValidationModel(CreatePersonRequest model, IHttpContextAccessor httpContextAccessor)
         {
+            _httpContextAccessor = httpContextAccessor;
+
             RuleFor(x => x.Name)
-                .NotEmpty().WithMessage(RsValidation.NameOrLastnameRequired)
-                .Length(2, 50).WithMessage(RsValidation.NameOrLastNameMinMaxValue)
-                .Matches(@"^[\p{L}]+$").WithMessage(RsValidation.NameOrLastNameContentWrong);
+                .NotEmpty().WithMessage(RsValidation.NameOrLastnameRequired.GetResourceTranslation(_httpContextAccessor))
+                .Length(2, 50).WithMessage(RsValidation.NameOrLastNameMinMaxValue.GetResourceTranslation(_httpContextAccessor))
+                .Matches(@"^[\p{L}]+$").WithMessage(RsValidation.NameOrLastNameContentWrong.GetResourceTranslation(_httpContextAccessor));
 
             RuleFor(x => x.Lastname)
-                .NotEmpty().WithMessage(RsValidation.NameOrLastnameRequired)
-                .Length(2, 50).WithMessage(RsValidation.NameOrLastNameMinMaxValue)
-                .Matches(@"^[\p{L}]+$").WithMessage(RsValidation.NameOrLastNameContentWrong);
+                .NotEmpty().WithMessage(RsValidation.NameOrLastnameRequired.GetResourceTranslation(_httpContextAccessor))
+                .Length(2, 50).WithMessage(RsValidation.NameOrLastNameMinMaxValue.GetResourceTranslation(_httpContextAccessor))
+                .Matches(@"^[\p{L}]+$").WithMessage(RsValidation.NameOrLastNameContentWrong.GetResourceTranslation(_httpContextAccessor));
 
             RuleFor(x => x.PersonalId)
-                .NotEmpty().WithMessage(RsValidation.PersonalIdIsRequired)
-                .Length(11).WithMessage(RsValidation.PersonalIdExactValue)
-                .Matches(@"^\d{11}$").WithMessage(RsValidation.PersonalIdOnlyDigits);
+                .NotEmpty().WithMessage(RsValidation.PersonalIdIsRequired.GetResourceTranslation(_httpContextAccessor))
+                .Length(11).WithMessage(RsValidation.PersonalIdExactValue.GetResourceTranslation(_httpContextAccessor))
+                .Matches(@"^\d{11}$").WithMessage(RsValidation.PersonalIdOnlyDigits.GetResourceTranslation(_httpContextAccessor));
 
             RuleFor(x => x.Gender)
-                .IsInEnum().WithMessage(RsValidation.InvalidGender);
+                .IsInEnum().WithMessage(RsValidation.InvalidGender.GetResourceTranslation(_httpContextAccessor));
 
             RuleFor(x => x.DateOfBirth)
-                .Must(BeAtLeast18YearsOld).WithMessage(RsValidation.PersonUnderAge);
+                .Must(BeAtLeast18YearsOld).WithMessage(RsValidation.PersonUnderAge.GetResourceTranslation(_httpContextAccessor));
 
             RuleForEach(x => x.TelNumbers)
                 .SetValidator(new TelephoneNumbersValidator());

@@ -22,7 +22,7 @@ namespace PeopleDictionary.Core.People
         public City? City { get; set; }
 
 
-        public void EditData(int id, string name, string lastname, GenderEnums gender, string personalId, DateTime dateofBirth, City city, List<TelephoneNumbers>? telNumbers)
+        public void EditData(int id, string name, string lastname, GenderEnums gender, string personalId, DateTime dateofBirth, City? city, List<TelephoneNumbers>? telNumbers)
         {
             Id = id;
             Name = name;
@@ -31,8 +31,12 @@ namespace PeopleDictionary.Core.People
             PersonalId = personalId;
             DateOfBirth = dateofBirth;
             TelNumbers = telNumbers;
-            City = city;
-            CityId = city.Id;
+
+            if (city.Id > 0)
+            {
+                City = city;
+                CityId = city.Id;
+            }
         }
 
         public void AddRelation(RelatedPerson relation)

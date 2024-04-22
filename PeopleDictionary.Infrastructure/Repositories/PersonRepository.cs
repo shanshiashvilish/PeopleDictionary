@@ -18,8 +18,15 @@ namespace PeopleDictionary.Infrastructure.Repositories
 
         public async Task AddAsync(Person person)
         {
-            await _dbContext.AddAsync(person);
-            await _dbContext.SaveChangesAsync();
+            try
+            {
+                await _dbContext.AddAsync(person);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
 
         public async Task<IEnumerable<Person>>? GetRelatedPeopleByTypeAsync(RelationEnums relationType)
@@ -111,9 +118,9 @@ namespace PeopleDictionary.Infrastructure.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public void Remove(int id)
+        public void Remove(Person person)
         {
-            _dbContext.Remove(id);
+            _dbContext.Remove(person);
         }
 
 

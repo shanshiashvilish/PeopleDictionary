@@ -13,7 +13,7 @@ namespace PeopleDictionary.Core.People
         Task<IEnumerable<Person>> DetailedSearchAsync(string? name, string? lastname, string? personalId, string? city, 
                                   GenderEnums gender, DateTime? dateOfBirth, DateTime? dateOfCreate, DateTime? dateOfUpdate);
         Task<IEnumerable<Person>>? GetRelatedPeopleByTypeAsync(RelationEnums relationType);
-        void Remove(int id);
+        void Remove(Person person);
 
         Task<City> GetCityById(int id);
     }

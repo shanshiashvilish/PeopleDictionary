@@ -21,7 +21,8 @@ namespace PeopleDictionary.Api
 
             services.AddScoped<CityDataSeeder>();
             services.AddPersonServices();
-            
+
+            services.AddHttpContextAccessor();
             services.AddHttpClient();
             services.AddMvc();
             services.AddControllers();

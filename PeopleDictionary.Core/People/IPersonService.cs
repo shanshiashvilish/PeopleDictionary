@@ -16,6 +16,6 @@ namespace PeopleDictionary.Core.People
         Task<BaseModel<bool>> UpdateAsync(int id, string name, string lastname, GenderEnums gender, string personalId, DateTime DateOfBirth, int? cityId, List<TelephoneNumbers>? telNumbers);
         Task<BaseModel<List<Person>>>? DetailedSearchAsync(int id, string? name, string? lastname, string? personalId, string? city, GenderEnums gender,
                                                                    DateTime? dateOfBirth, DateTime? dateOfCreate, DateTime? dateOfUpdate);
-        void Remove(int id);
+        Task Remove(int id);
     }
 }

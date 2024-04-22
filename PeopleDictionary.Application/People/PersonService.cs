@@ -39,22 +39,22 @@ namespace PeopleDictionary.Application.People
             try
             {
                 var person = await GetByIdAsync(id);
+                var city = new Core.Cities.City();
 
                 if (person == null || person.Data == null)
                 {
                     return new BaseModel<bool>(false, default, RsValidation.PersonNotFound.GetResourceTranslation(_httpContextAccessor));
                 }
 
-                if (cityId < 1)
+                if (cityId >= 1)
                 {
-                    return new BaseModel<bool>(false, default, RsValidation.CityNotFound.GetResourceTranslation(_httpContextAccessor));
-                }
+                    city = await _repository.GetCityById(cityId ?? -1);
 
-                var city = await _repository.GetCityById(cityId ?? -1);
 
-                if (city == null)
-                {
-                    return new BaseModel<bool>(false, default, RsValidation.CityNotFound.GetResourceTranslation(_httpContextAccessor));
+                    if (city == null)
+                    {
+                        return new BaseModel<bool>(false, default, RsValidation.CityNotFound.GetResourceTranslation(_httpContextAccessor));
+                    }
                 }
 
                 person.Data.EditData(id, name, lastname, gender, personalId, DateOfBirth, city, telNumbers);
@@ -175,6 +175,16 @@ namespace PeopleDictionary.Application.People
                     return new BaseModel<PagedResult<Person>>(false, default, RsValidation.EmptyValues.GetResourceTranslation(_httpContextAccessor));
                 }
 
+                if (pageSize <= 0)
+                {
+                    pageSize = int.MaxValue;
+                }
+
+                if (pageNumber <= 0)
+                {
+                    pageNumber = 1;
+                }
+
                 var result = await _repository.QuickSearchAsync(name, lastname, personalId, pageNumber, pageSize);
 
                 if (!result.Items.Any())
@@ -238,11 +248,17 @@ namespace PeopleDictionary.Application.People
             }
         }
 
-        public void Remove(int id)
+        public async Task Remove(int id)
         {
             try
             {
-                _repository.Remove(id);
+                var person = await GetByIdAsync(id);
+
+                if(person.IsSuccess)
+                {
+                    _repository.Remove(person.Data);
+                    await _repository.SaveChangesAsync();
+                }
             }
             catch (Exception ex)
             {

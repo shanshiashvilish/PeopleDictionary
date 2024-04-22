@@ -15,9 +15,9 @@ namespace PeopleDictionary.Api.Controllers
     public class PersonController : ControllerBase
     {
         private readonly IPersonService _personService;
-        private readonly IHttpContextAccessor? _httpContextAccessor;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public PersonController(IPersonService personService, IHttpContextAccessor? httpContextAccessor)
+        public PersonController(IPersonService personService, IHttpContextAccessor httpContextAccessor)
         {
             _personService = personService;
             _httpContextAccessor = httpContextAccessor;
@@ -31,7 +31,7 @@ namespace PeopleDictionary.Api.Controllers
 
             try
             {
-                var validator = new CreatePersonValidationModel(request);
+                var validator = new CreatePersonValidationModel(request, _httpContextAccessor);
                 var validate = await validator.ValidateAsync(request);
 
                 if (!validate.IsValid)
@@ -49,7 +49,7 @@ namespace PeopleDictionary.Api.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<ActionResult<BaseModel<GetPersonResponse?>>> GetByIdAsync([FromQuery] int id)
         {
             if (!ModelState.IsValid)
@@ -108,8 +108,8 @@ namespace PeopleDictionary.Api.Controllers
             }
         }
 
-        [HttpDelete]
-        public ActionResult<BaseModel<bool>> DeletePerson([FromQuery] int personId)
+        [HttpDelete("{personId}")]
+        public ActionResult<BaseModel<bool>> DeletePerson(int personId)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
@@ -139,7 +139,7 @@ namespace PeopleDictionary.Api.Controllers
 
             try
             {
-                var validator = new QuickSearchValidationModel(request);
+                var validator = new QuickSearchValidationModel(request, _httpContextAccessor);
                 var validate = await validator.ValidateAsync(request);
 
                 if (!validate.IsValid)
@@ -213,8 +213,8 @@ namespace PeopleDictionary.Api.Controllers
             }
         }
 
-        [HttpPatch("relation/add")]
-        public async Task<ActionResult<BaseModel<bool>>> AddRelationAsync([FromRoute] int personId, [FromQuery] int relatedId, [FromQuery] RelationEnums type)
+        [HttpPatch("relation/{personId}/add/{relatedId}")]
+        public async Task<ActionResult<BaseModel<bool>>> AddRelationAsync([FromRoute] int personId, [FromRoute] int relatedId, [FromQuery] RelationEnums type)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
@@ -241,8 +241,8 @@ namespace PeopleDictionary.Api.Controllers
             }
         }
 
-        [HttpPatch("relation/remove")]
-        public async Task<ActionResult<BaseModel<bool>>> RemoveRelationAsync([FromQuery] int personId, [FromQuery] int relatedId)
+        [HttpPatch("relation/{personId}/remove/{relatedId}")]
+        public async Task<ActionResult<BaseModel<bool>>> RemoveRelationAsync([FromRoute] int personId, [FromRoute] int relatedId)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
